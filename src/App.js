@@ -1,21 +1,37 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import './App.css'
 
-class App extends Component {
-  render() {
+import {
+    SortableContainer,
+    SortableElement,
+    arrayMove
+} from 'react-sortable-hoc';
+
+const SortableItem = SortableElement(({value}) => <li>{value}</li>);
+
+const SortableList = SortableContainer(({items}) => {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-      </div>
+        <ul>
+            {items.map((value, index) => (
+                <SortableItem key={`item-${index}`} index={index} value={value} />
+            ))}
+        </ul>
     );
-  }
+});
+
+class SortableComponent extends Component {
+    state = {
+        items: ['Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5', 'Item 6', 'Item 7', 'Item 8', 'Item 9', 'Item 10', 'Item 11', 'Item 12', 'Item 13', 'Item 14', 'Item 15', 'Item 16', 'Item 17', 'Item 18', 'Item 19', 'Item 20', 'Item 21'],
+    };
+    onSortEnd = ({oldIndex, newIndex}) => {
+        this.setState({
+            items: arrayMove(this.state.items, oldIndex, newIndex),
+        });
+    };
+    render() {
+        return <SortableList items={this.state.items} onSortEnd={this.onSortEnd} />;
+    }
 }
 
-export default App;
+
+export default SortableComponent;
